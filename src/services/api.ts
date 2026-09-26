@@ -283,7 +283,33 @@ export async function getRecommendations(): Promise<RecommendationData[]> {
 
 // ─── Analytics ───────────────────────────────────────────────────────────────
 export async function getAnalyticsOverview(): Promise<AnalyticsOverview> {
-  return apiRequest<AnalyticsOverview>('/analytics/overview');
+  try {
+    return await apiRequest<AnalyticsOverview>('/analytics/overview');
+  } catch {
+    console.warn('[API] Backend offline — using mock analytics overview');
+    return {
+      overall_readiness: 74,
+      readiness_trend: 3.2,
+      avg_skill_score: 72,
+      total_lessons_completed: 18,
+      total_assessments: 6,
+      current_streak: 5,
+      strengths: ['Java Collections', 'Verbal Communication', 'Arrays & Strings'],
+      weaknesses: [
+        { skill_name: 'dynamic_programming', display_name: 'Dynamic Programming', score: 42, trend: -3.5, recommended_module_title: 'DP Fundamentals', recommended_module_id: 3, recommended_track_id: 1 },
+        { skill_name: 'system_design', display_name: 'System Design', score: 52, trend: 2.0, recommended_module_title: 'HLD Basics', recommended_module_id: 5, recommended_track_id: 3 },
+      ],
+      skills: MOCK_SKILLS.map(s => ({
+        name: s.name,
+        display_name: s.display_name,
+        category: s.category,
+        score: s.score,
+        previous_score: s.previous_score,
+        trend: s.trend,
+        classification: s.classification,
+      })),
+    };
+  }
 }
 
 export async function getSkillAnalytics(): Promise<SkillAnalytics[]> {
