@@ -1,15 +1,16 @@
-import type { AppState } from '../types';
+import type { AppState, StudentProfile } from '../types';
+
+export const mockStudentProfile: StudentProfile = {
+  id: "std_101",
+  name: "Kishore S",
+  targetRole: "Java Full Stack Developer",
+  dreamCompany: "Google",
+  readinessScore: 74,
+  streakDays: 5,
+  recommendedTopics: ["Dynamic Programming", "Graph Traversal", "System Design Basics"]
+};
 
 export const mockData: AppState = {
-  user: {
-    id: "u-001",
-    name: "Alex Dev",
-    readinessScore: 78,
-    streak: 12
-  },
-  recommendations: [
-    { id: "r-1", label: "Review React Hooks", urgency: "high" },
-    { id: "r-2", label: "Practice Binary Search", urgency: "medium" },
-    { id: "r-3", label: "Update Resume", urgency: "low" }
-  ]
+  user: mockStudentProfile,
+  isLoading: false
 };
