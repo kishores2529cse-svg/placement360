@@ -1,0 +1,1 @@
+export default function AssessmentHub() { return <div className='p-8'><h1 className='text-3xl font-bold'>Assessment Hub</h1><p className='text-muted-foreground mt-2'>Ashwin & Kishore: Code editor, MCQ player, timer</p></div>; }
