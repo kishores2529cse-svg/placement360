@@ -130,29 +130,101 @@ export async function getStudentProfile(): Promise<StudentProfile> {
   }
 }
 
+// ─── Mock Data (used when backend is offline) ────────────────────────────────
+const MOCK_SKILLS: import('../types').SkillData[] = [
+  { id: 1, name: 'dsa', display_name: 'DSA', category: 'technical', score: 68, previous_score: 62, trend: 6, classification: 'Developing', confidence: 0.7, last_assessed_at: new Date().toISOString() },
+  { id: 2, name: 'java_oop', display_name: 'Java OOP', category: 'technical', score: 85, previous_score: 80, trend: 5, classification: 'Strong', confidence: 0.85, last_assessed_at: new Date().toISOString() },
+  { id: 3, name: 'system_design', display_name: 'System Design', category: 'technical', score: 52, previous_score: 48, trend: 4, classification: 'Needs Improvement', confidence: 0.5, last_assessed_at: new Date().toISOString() },
+  { id: 4, name: 'aptitude', display_name: 'Aptitude', category: 'aptitude', score: 78, previous_score: 75, trend: 3, classification: 'Developing', confidence: 0.75, last_assessed_at: new Date().toISOString() },
+  { id: 5, name: 'communication', display_name: 'Communication', category: 'soft_skills', score: 88, previous_score: 84, trend: 4, classification: 'Strong', confidence: 0.9, last_assessed_at: new Date().toISOString() },
+  { id: 6, name: 'sql', display_name: 'SQL & Databases', category: 'technical', score: 72, previous_score: 68, trend: 4, classification: 'Developing', confidence: 0.7, last_assessed_at: new Date().toISOString() },
+  { id: 7, name: 'os_networks', display_name: 'OS & Networks', category: 'technical', score: 60, previous_score: 55, trend: 5, classification: 'Developing', confidence: 0.6, last_assessed_at: new Date().toISOString() },
+];
+
+const MOCK_DASHBOARD: DashboardData = {
+  student: { id: 1, name: 'Kishore S', email: 'kishore@demo.com', target_role: 'Java Full Stack Developer', target_company: 'Google', college: 'Anna University' },
+  readiness: { overall: 74, technical: 68, aptitude: 78, communication: 88, interview: 65, project: 70 },
+  streak: { current: 5, longest: 12, last_activity_date: new Date().toISOString() },
+  today_completed: 2,
+  today_total: 5,
+  today_tasks: [
+    { id: 1, title: 'Practice Dynamic Programming - Knapsack', priority: 'high', rec_type: 'practice', estimated_minutes: 30, track_id: 1 },
+    { id: 2, title: 'Review Java Collections Framework', priority: 'medium', rec_type: 'review', estimated_minutes: 20, track_id: 2 },
+    { id: 3, title: 'System Design: URL Shortener', priority: 'medium', rec_type: 'learn', estimated_minutes: 45 },
+  ],
+  recommendations: [
+    { id: 1, title: 'Focus on Dynamic Programming', description: 'Your DP score dropped 8% — revisit memoization patterns.', priority: 'high', rec_type: 'skill_improvement', skill_name: 'dsa', track_id: 1, created_at: new Date().toISOString() },
+    { id: 2, title: 'Start System Design Basics', description: 'System Design is a weak area. Begin with HLD fundamentals.', priority: 'medium', rec_type: 'new_topic', track_id: 3, created_at: new Date().toISOString() },
+    { id: 3, title: 'Mock Interview Practice', description: 'Schedule a mock viva to boost interview readiness.', priority: 'low', rec_type: 'assessment', created_at: new Date().toISOString() },
+  ],
+  recent_activity: [
+    { id: 1, activity_type: 'lesson_complete', title: 'Completed: Arrays & Hashing', category: 'DSA', score: 92, created_at: new Date(Date.now() - 3600000).toISOString() },
+    { id: 2, activity_type: 'assessment_complete', title: 'CCC Assessment: Java OOP', category: 'Java', score: 85, score_change: 5, created_at: new Date(Date.now() - 7200000).toISOString() },
+    { id: 3, activity_type: 'skill_improved', title: 'Communication skill improved', category: 'Soft Skills', score_change: 4, created_at: new Date(Date.now() - 86400000).toISOString() },
+    { id: 4, activity_type: 'lesson_complete', title: 'Completed: Binary Search Trees', category: 'DSA', score: 78, created_at: new Date(Date.now() - 172800000).toISOString() },
+  ],
+  skills: MOCK_SKILLS,
+};
+
+function generateMockHistory(): ReadinessHistoryPoint[] {
+  const points: ReadinessHistoryPoint[] = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const base = 55 + (29 - i) * 0.6;
+    points.push({
+      date: d.toISOString().slice(0, 10),
+      score: Math.min(100, base + Math.random() * 8),
+      technical_score: Math.min(100, base - 5 + Math.random() * 10),
+      aptitude_score: Math.min(100, base + 2 + Math.random() * 6),
+      communication_score: Math.min(100, base + 10 + Math.random() * 5),
+      interview_score: Math.min(100, base - 8 + Math.random() * 10),
+    });
+  }
+  return points;
+}
+
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 export async function getDashboard(): Promise<DashboardData> {
-  return apiRequest<DashboardData>('/dashboard');
+  try {
+    return await apiRequest<DashboardData>('/dashboard');
+  } catch {
+    console.warn('[API] Backend offline — using mock dashboard data');
+    return MOCK_DASHBOARD;
+  }
 }
 
 // ─── LMS Tracks ──────────────────────────────────────────────────────────────
 export async function getLmsTracks(): Promise<LmsTrack[]> {
-  const tracks = await apiRequest<TrackData[]>('/tracks');
-  // Map to legacy format for backward compat
-  return tracks.map(t => ({
-    trackId: String(t.id),
-    title: t.title,
-    progress: t.progress_percent,
-    modules: t.modules.map(m => ({
-      id: String(m.id),
-      title: m.title,
-      status:
-        m.status === 'completed' ? 'completed' :
-        m.status === 'in_progress' ? 'in_progress' :
-        m.status === 'recommended' ? 'recommended_priority' :
-        'locked' as 'locked',
-    })),
-  }));
+  try {
+    const tracks = await apiRequest<TrackData[]>('/tracks');
+    return tracks.map(t => ({
+      trackId: String(t.id),
+      title: t.title,
+      progress: t.progress_percent,
+      modules: t.modules.map(m => ({
+        id: String(m.id),
+        title: m.title,
+        status:
+          m.status === 'completed' ? 'completed' :
+          m.status === 'in_progress' ? 'in_progress' :
+          m.status === 'recommended' ? 'recommended_priority' :
+          'locked' as 'locked',
+      })),
+    }));
+  } catch {
+    console.warn('[API] Backend offline — using mock LMS tracks');
+    return [
+      { trackId: 'dsa-01', title: 'Data Structures & Algorithms', progress: 65, modules: [
+        { id: 'm1', title: 'Arrays & Hashing', status: 'completed' },
+        { id: 'm2', title: 'Binary Search Trees', status: 'in_progress' },
+        { id: 'm3', title: 'Dynamic Programming', status: 'recommended_priority' },
+      ]},
+      { trackId: 'java-core', title: 'Advanced Java & OOP', progress: 82, modules: [
+        { id: 'j1', title: 'Collections Framework', status: 'completed' },
+        { id: 'j2', title: 'Multithreading & Concurrency', status: 'in_progress' },
+      ]},
+    ];
+  }
 }
 
 export async function getTracksData(): Promise<TrackData[]> {
@@ -225,16 +297,30 @@ export async function getWeaknesses(): Promise<WeaknessData[]> {
 export async function getReadinessHistory(
   period: 'daily' | 'weekly' | 'monthly' = 'monthly'
 ): Promise<ReadinessHistoryPoint[]> {
-  return apiRequest<ReadinessHistoryPoint[]>(`/analytics/readiness-history?period=${period}`);
+  try {
+    return await apiRequest<ReadinessHistoryPoint[]>(`/analytics/readiness-history?period=${period}`);
+  } catch {
+    console.warn('[API] Backend offline — using mock readiness history');
+    return generateMockHistory();
+  }
 }
 
 export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
-  const overview = await getAnalyticsOverview();
-  return {
-    categories: overview.skills.map(s => ({ name: s.display_name, score: s.score })),
-    strengths: overview.strengths,
-    weaknesses: overview.weaknesses.map(w => w.display_name),
-  };
+  try {
+    const overview = await getAnalyticsOverview();
+    return {
+      categories: overview.skills.map(s => ({ name: s.display_name, score: s.score })),
+      strengths: overview.strengths,
+      weaknesses: overview.weaknesses.map(w => w.display_name),
+    };
+  } catch {
+    console.warn('[API] Backend offline — using mock analytics summary');
+    return {
+      categories: MOCK_SKILLS.map(s => ({ name: s.display_name, score: s.score })),
+      strengths: ['Java Collections', 'Verbal Communication', 'Arrays & Strings'],
+      weaknesses: ['Dynamic Programming', 'Concurrency Deadlocks'],
+    };
+  }
 }
 
 // ─── Assessment Integration (for Kishore's system) ───────────────────────────
