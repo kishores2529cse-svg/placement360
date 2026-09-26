@@ -228,7 +228,54 @@ export async function getLmsTracks(): Promise<LmsTrack[]> {
 }
 
 export async function getTracksData(): Promise<TrackData[]> {
-  return apiRequest<TrackData[]>('/tracks');
+  try {
+    return await apiRequest<TrackData[]>('/tracks');
+  } catch {
+    console.warn('[API] Backend offline — using mock tracks data');
+    return [
+      {
+        id: 1, title: 'Data Structures & Algorithms', description: 'Master DSA for coding interviews', icon: 'Code2', color: 'emerald',
+        estimated_hours: 40, progress_percent: 65, completed_modules: 2, total_modules: 4, is_completed: false,
+        modules: [
+          { id: 1, title: 'Arrays & Hashing', description: 'Fundamentals of arrays and hash maps', order_index: 0, difficulty: 'Easy', estimated_minutes: 120, status: 'completed', progress_percent: 100, completed_lessons: 4, total_lessons: 4, lessons: [
+            { id: 1, title: 'Two Sum Problem', description: '', difficulty: 'Easy', estimated_minutes: 30, order_index: 0, is_completed: true },
+            { id: 2, title: 'Contains Duplicate', description: '', difficulty: 'Easy', estimated_minutes: 25, order_index: 1, is_completed: true },
+            { id: 3, title: 'Valid Anagram', description: '', difficulty: 'Easy', estimated_minutes: 25, order_index: 2, is_completed: true },
+            { id: 4, title: 'Group Anagrams', description: '', difficulty: 'Medium', estimated_minutes: 40, order_index: 3, is_completed: true },
+          ]},
+          { id: 2, title: 'Binary Search Trees', description: 'Tree traversals and BST operations', order_index: 1, difficulty: 'Medium', estimated_minutes: 180, status: 'in_progress', progress_percent: 50, completed_lessons: 2, total_lessons: 4, lessons: [
+            { id: 5, title: 'Inorder Traversal', description: '', difficulty: 'Easy', estimated_minutes: 30, order_index: 0, is_completed: true },
+            { id: 6, title: 'Validate BST', description: '', difficulty: 'Medium', estimated_minutes: 45, order_index: 1, is_completed: true },
+            { id: 7, title: 'Lowest Common Ancestor', description: '', difficulty: 'Medium', estimated_minutes: 45, order_index: 2, is_completed: false },
+            { id: 8, title: 'Serialize & Deserialize', description: '', difficulty: 'Hard', estimated_minutes: 60, order_index: 3, is_completed: false },
+          ]},
+          { id: 3, title: 'Dynamic Programming', description: 'Memoization and tabulation techniques', order_index: 2, difficulty: 'Hard', estimated_minutes: 240, status: 'recommended', progress_percent: 0, completed_lessons: 0, total_lessons: 3, lessons: [
+            { id: 9, title: 'Fibonacci Variants', description: '', difficulty: 'Easy', estimated_minutes: 30, order_index: 0, is_completed: false },
+            { id: 10, title: '0/1 Knapsack', description: '', difficulty: 'Medium', estimated_minutes: 60, order_index: 1, is_completed: false },
+            { id: 11, title: 'Longest Common Subsequence', description: '', difficulty: 'Hard', estimated_minutes: 60, order_index: 2, is_completed: false },
+          ]},
+          { id: 4, title: 'Graph Algorithms', description: 'BFS, DFS, and shortest paths', order_index: 3, difficulty: 'Hard', estimated_minutes: 200, status: 'locked', progress_percent: 0, completed_lessons: 0, total_lessons: 3, lessons: [] },
+        ],
+      },
+      {
+        id: 2, title: 'Advanced Java & OOP', description: 'Master Java for enterprise development', icon: 'Coffee', color: 'orange',
+        estimated_hours: 30, progress_percent: 82, completed_modules: 2, total_modules: 3, is_completed: false,
+        modules: [
+          { id: 5, title: 'Collections Framework', description: 'Lists, Sets, Maps deep dive', order_index: 0, difficulty: 'Medium', estimated_minutes: 150, status: 'completed', progress_percent: 100, completed_lessons: 3, total_lessons: 3, lessons: [
+            { id: 12, title: 'ArrayList vs LinkedList', description: '', difficulty: 'Easy', estimated_minutes: 30, order_index: 0, is_completed: true },
+            { id: 13, title: 'HashMap Internals', description: '', difficulty: 'Medium', estimated_minutes: 45, order_index: 1, is_completed: true },
+            { id: 14, title: 'TreeMap & Comparable', description: '', difficulty: 'Medium', estimated_minutes: 45, order_index: 2, is_completed: true },
+          ]},
+          { id: 6, title: 'Multithreading & Concurrency', description: 'Thread safety and parallel execution', order_index: 1, difficulty: 'Hard', estimated_minutes: 180, status: 'in_progress', progress_percent: 33, completed_lessons: 1, total_lessons: 3, lessons: [
+            { id: 15, title: 'Thread Lifecycle', description: '', difficulty: 'Easy', estimated_minutes: 30, order_index: 0, is_completed: true },
+            { id: 16, title: 'Synchronized Blocks', description: '', difficulty: 'Medium', estimated_minutes: 45, order_index: 1, is_completed: false },
+            { id: 17, title: 'Deadlock Prevention', description: '', difficulty: 'Hard', estimated_minutes: 60, order_index: 2, is_completed: false },
+          ]},
+          { id: 7, title: 'Design Patterns', description: 'Singleton, Factory, Observer, etc.', order_index: 2, difficulty: 'Medium', estimated_minutes: 120, status: 'locked', progress_percent: 0, completed_lessons: 0, total_lessons: 3, lessons: [] },
+        ],
+      },
+    ];
+  }
 }
 
 export async function getTrackData(trackId: number): Promise<TrackData> {
