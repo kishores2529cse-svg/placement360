@@ -5,9 +5,9 @@ import { BookOpen, Eye, EyeOff, Loader2 } from 'lucide-react';
 export default function LoginPage() {
   const { login, register, error } = useAuth();
   const [mode, setMode] = useState<'login' | 'register'>('login');
-  const [email, setEmail] = useState('ashwin@placementprep.ai');
-  const [password, setPassword] = useState('demo1234');
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState('kishores2529cse@gmail.com');
+  const [password, setPassword] = useState('123456789');
+  const [name, setName] = useState('KISHORE S');
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
@@ -77,7 +77,7 @@ export default function LoginPage() {
             <h2 className="text-2xl font-black text-gray-900 mb-1">
               {mode === 'login' ? 'Welcome back' : 'Create account'}
             </h2>
-            <p className="text-gray-500 text-sm mb-8">
+            <p className="text-gray-500 text-sm mb-6">
               {mode === 'login'
                 ? 'Sign in to your placement dashboard'
                 : 'Start your placement journey today'}
@@ -85,8 +85,28 @@ export default function LoginPage() {
 
             {/* Demo hint */}
             {mode === 'login' && (
-              <div className="mb-6 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700">
-                <span className="font-semibold">Demo:</span> ashwin@placementprep.ai / demo1234
+              <div
+                onClick={() => {
+                  setEmail('kishores2529cse@gmail.com');
+                  setPassword('123456789');
+                }}
+                className="mb-6 p-3.5 bg-emerald-50/90 border border-emerald-200 rounded-2xl text-emerald-800 cursor-pointer hover:bg-emerald-100/90 transition-all flex items-center justify-between group"
+              >
+                <div>
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Demo Access (KISHORE S)
+                  </div>
+                  <div className="text-xs font-mono text-emerald-900">
+                    <span className="font-semibold text-emerald-700">Email:</span> kishores2529cse@gmail.com
+                  </div>
+                  <div className="text-xs font-mono text-emerald-900">
+                    <span className="font-semibold text-emerald-700">Pass:</span> 123456789
+                  </div>
+                </div>
+                <span className="text-xs bg-emerald-600 group-hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl font-medium shadow-sm transition-all whitespace-nowrap">
+                  Auto Fill
+                </span>
               </div>
             )}
 
@@ -105,7 +125,7 @@ export default function LoginPage() {
                     type="text"
                     value={name}
                     onChange={e => setName(e.target.value)}
-                    placeholder="Ashwin Kumar"
+                    placeholder="KISHORE S"
                     className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                   />
                 </div>
@@ -116,7 +136,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  placeholder="ashwin@placementprep.ai"
+                  placeholder="kishores2529cse@gmail.com"
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                   required
                 />

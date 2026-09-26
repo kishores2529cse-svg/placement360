@@ -22,8 +22,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const token = getToken();
       if (!token) {
         try {
-          // Auto-login to bypass login page for now
-          await apiLogin('ashwin@placementprep.ai', 'demo1234');
+          // Auto-login to bypass login page for now with Kishore's demo account
+          await apiLogin('kishores2529cse@gmail.com', '123456789');
           setIsAuthenticated(true);
         } catch (err) {
           setIsAuthenticated(false);

@@ -124,8 +124,8 @@ export default function SidebarLayout({ children, title, subtitle }: SidebarLayo
               <Bell className="w-4 h-4 text-gray-600" />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full"></span>
             </button>
-            <div className="w-9 h-9 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-xl flex items-center justify-center text-white text-sm font-bold">
-              A
+            <div className="w-9 h-9 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-sm">
+              K
             </div>
           </div>
         </header>
