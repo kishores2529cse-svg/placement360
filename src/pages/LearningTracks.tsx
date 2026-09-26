@@ -1,0 +1,1 @@
+export default function LearningTracks() { return <div className='p-8'><h1 className='text-3xl font-bold'>Learning Tracks</h1><p className='text-muted-foreground mt-2'>Ashwin: Module cards, video/text reader, progress bar</p></div>; }

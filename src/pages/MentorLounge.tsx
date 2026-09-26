@@ -1,0 +1,1 @@
+export default function MentorLounge() { return <div className='p-8'><h1 className='text-3xl font-bold'>Mentor Lounge</h1><p className='text-muted-foreground mt-2'>Kishore: Humanoid avatar container, voice/text chat, feedback panel</p></div>; }
