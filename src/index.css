@@ -1,59 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* PlacementPrep Green Color System */
+    --background: 150 20% 97%;
+    --foreground: 160 40% 8%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 160 40% 8%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
+    --popover-foreground: 160 40% 8%;
+    --primary: 158 64% 32%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 30% 94%;
+    --secondary-foreground: 158 64% 25%;
+    --muted: 150 15% 94%;
+    --muted-foreground: 150 10% 50%;
+    --accent: 158 64% 32%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 150 20% 90%;
+    --input: 150 20% 90%;
+    --ring: 158 64% 32%;
+    --radius: 0.75rem;
+
+    /* Brand colors */
+    --emerald-deep: #064e3b;
+    --emerald-rich: #065f46;
+    --emerald-mid: #047857;
+    --emerald-bright: #059669;
+    --emerald-light: #10b981;
+    --emerald-pale: #d1fae5;
+    --sidebar-bg: #064e3b;
+    --sidebar-hover: #065f46;
+    --sidebar-active: #059669;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
+@layer components {
+  /* Premium Card */
+  .pp-card {
+    @apply bg-white rounded-2xl border border-gray-100 shadow-sm;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
   }
-  body {
-    @apply bg-background text-foreground;
+  .pp-card:hover {
+    @apply shadow-md;
+  }
+
+  /* KPI Metric Card */
+  .pp-metric-card {
+    @apply pp-card p-6 flex flex-col gap-3;
+  }
+
+  /* Section Title */
+  .pp-section-title {
+    @apply text-lg font-bold text-gray-900 flex items-center gap-2;
+  }
+
+  /* Progress Bar */
+  .pp-progress-bar {
+    @apply w-full bg-gray-100 rounded-full overflow-hidden;
+    height: 6px;
+  }
+  .pp-progress-bar-fill {
+    @apply h-full rounded-full transition-all duration-700;
+    background: linear-gradient(90deg, #059669, #10b981);
+  }
+
+  /* Skill Badge */
+  .pp-badge-strong {
+    @apply px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full;
+  }
+  .pp-badge-developing {
+    @apply px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-semibold rounded-full;
+  }
+  .pp-badge-needs {
+    @apply px-2 py-0.5 bg-red-100 text-red-700 text-xs font-semibold rounded-full;
+  }
+
+  /* Priority badges */
+  .pp-priority-high {
+    @apply px-2.5 py-1 bg-red-50 text-red-600 text-xs font-bold rounded-full uppercase tracking-wide;
+  }
+  .pp-priority-medium {
+    @apply px-2.5 py-1 bg-amber-50 text-amber-600 text-xs font-bold rounded-full uppercase tracking-wide;
+  }
+  .pp-priority-low {
+    @apply px-2.5 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full uppercase tracking-wide;
+  }
+
+  /* Buttons */
+  .pp-btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl transition-all duration-200 active:scale-95 shadow-sm;
+  }
+  .pp-btn-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-semibold rounded-xl transition-all duration-200 active:scale-95;
+  }
+  .pp-btn-ghost {
+    @apply inline-flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-gray-600 text-sm font-medium rounded-xl transition-all duration-200;
+  }
+
+  /* Skeleton loader */
+  .pp-skeleton {
+    @apply bg-gray-200 rounded-lg animate-pulse;
+  }
+
+  /* Status indicators */
+  .pp-status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+  .pp-status-completed { @apply pp-status-dot bg-emerald-500; }
+  .pp-status-in-progress { @apply pp-status-dot bg-amber-400; }
+  .pp-status-locked { @apply pp-status-dot bg-gray-300; }
+  .pp-status-available { @apply pp-status-dot bg-blue-400; }
+}
+
+@layer utilities {
+  /* Scrollbar styling */
+  .pp-scrollbar::-webkit-scrollbar { width: 4px; }
+  .pp-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .pp-scrollbar::-webkit-scrollbar-thumb { background: #d1fae5; border-radius: 4px; }
+
+  /* Animate in */
+  .animate-fade-up {
+    animation: fadeUp 0.4s ease forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #059669, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }

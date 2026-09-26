@@ -1,34 +1,77 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import LearningTracks from './pages/LearningTracks';
+import Analytics from './pages/Analytics';
+
+// Kishore's pages — imported but not built by Ashwin
 import AssessmentHub from './pages/AssessmentHub';
 import MentorLounge from './pages/MentorLounge';
-import Analytics from './pages/Analytics';
+
+// Protected route wrapper
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin" />
+          <div className="text-sm font-medium text-gray-500">Loading PlacementPrep AI...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+function AppRoutes() {
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />}
+      />
+      <Route
+        path="/"
+        element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
+      />
+      <Route
+        path="/learn"
+        element={<ProtectedRoute><LearningTracks /></ProtectedRoute>}
+      />
+      <Route
+        path="/analytics"
+        element={<ProtectedRoute><Analytics /></ProtectedRoute>}
+      />
+      {/* Kishore's routes */}
+      <Route
+        path="/assessment"
+        element={<ProtectedRoute><AssessmentHub /></ProtectedRoute>}
+      />
+      <Route
+        path="/mentor"
+        element={<ProtectedRoute><MentorLounge /></ProtectedRoute>}
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
 
 function App() {
   return (
     <Router>
-      <div className="flex h-screen bg-background">
-        <aside className="w-64 bg-card border-r border-border p-4 flex flex-col gap-4">
-          <div className="font-bold text-xl text-primary mb-6">PlacementPrep AI</div>
-          <nav className="flex flex-col gap-2">
-            <Link to="/" className="p-2 hover:bg-muted rounded-md font-medium text-foreground">Dashboard</Link>
-            <Link to="/learn" className="p-2 hover:bg-muted rounded-md font-medium text-foreground">Learning Tracks</Link>
-            <Link to="/assessment" className="p-2 hover:bg-muted rounded-md font-medium text-foreground">Assessment Hub</Link>
-            <Link to="/mentor" className="p-2 hover:bg-muted rounded-md font-medium text-foreground">Mentor Lounge</Link>
-            <Link to="/analytics" className="p-2 hover:bg-muted rounded-md font-medium text-foreground">Analytics</Link>
-          </nav>
-        </aside>
-        <main className="flex-1 overflow-auto bg-muted/20">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/learn" element={<LearningTracks />} />
-            <Route path="/assessment" element={<AssessmentHub />} />
-            <Route path="/mentor" element={<MentorLounge />} />
-            <Route path="/analytics" element={<Analytics />} />
-          </Routes>
-        </main>
-      </div>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </Router>
   );
 }
