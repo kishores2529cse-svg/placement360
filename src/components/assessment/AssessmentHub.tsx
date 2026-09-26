@@ -20,7 +20,7 @@ export default function AssessmentHub() {
       {/* Embedded Live CCC System */}
       <div className="flex-1 w-full h-full relative">
         <iframe 
-          src="http://system-monitoring-phi.vercel.app/" 
+          src="https://system-monitoring-phi.vercel.app/" 
           className="w-full h-full border-none"
           title="CCC System Monitoring"
           // CRITICAL FOR PROCTORING: Allows camera, mic, and screen sharing if your app uses it
